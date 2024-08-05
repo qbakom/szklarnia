@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relay Settings</title>
+    <style>
+        body {
+            font-family: Times New Roman, Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 10px 0;
+        }
+
+        .button-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .button-row .description {
+            margin-right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .button-row .toggle-button {
+            display: flex;
+            align-items: center;
+            padding: 10px 20px;
+            border: 2px solid #ccc;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 18px;
+            transition: background-color 0.3s, color 0.3s;
+            width: 120px;
+            justify-content: center;
+        }
+
+        .button-row .toggle-button.off {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .button-row .toggle-button.on {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .button-row .toggle-button .status-indicator {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .button-row .toggle-button.off .status-indicator {
+            background-color: #721c24;
+        }
+
+        .button-row .toggle-button.on .status-indicator {
+            background-color: #155724;
+        }
+    </style>
+</head>
+<body>
+    <p>RELAY settings:</p>
+    <div class="button-container">
+        <div class="button-row">
+            <div class="description">Sekcja Pomidory</div>
+            <button class="toggle-button off" onclick="toggleState('section1')">
+                <div class="status-indicator"></div>
+                OFF
+            </button>
+        </div>
+        <div class="button-row">
+            <div class="description">Sekcja Alternatywna</div>
+            <button class="toggle-button on" onclick="toggleState('section2')">
+                <div class="status-indicator"></div>
+                ON
+            </button>
+        </div>
+    </div>
+
+    <script>
+        function toggleState(sectionId) {
+            // Simulate toggling logic here
+            const button = document.querySelector(`button[onclick="toggleState('${sectionId}')"]`);
+            if (button.classList.contains('on')) {
+                button.classList.remove('on');
+                button.classList.add('off');
+                button.innerHTML = '<div class="status-indicator"></div>OFF';
+            } else {
+                button.classList.remove('off');
+                button.classList.add('on');
+                button.innerHTML = '<div class="status-indicator"></div>ON';
+            }
+        }
+    </script>
+</body>
+</html>

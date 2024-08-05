@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Szklarnia Relay Settings</title>
+    <style>
+        body {
+            font-family: Times New Roman, Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            text-align: center;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .button-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .button-row .description {
+            margin-right: 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .button-row .toggle {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .button-row .toggle input[type="checkbox"] {
+            display: none;
+        }
+
+        .button-row .toggle label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background-color: #ddd;
+            font-size: 18px;
+            width: 150px;
+            justify-content: center;
+            color: #333;
+            transition: background-color 0.3s, color 0.3s;
+            overflow: hidden;
+        }
+
+        .button-row .toggle label::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            width: 60px;
+            height: 30px;
+            background-color: #bbb;
+            border-radius: 15px;
+            transition: background-color 0.3s, transform 0.3s;
+            transform: translateY(-50%);
+        }
+
+        .button-row .toggle input[type="checkbox"]:checked + label {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .button-row .toggle input[type="checkbox"]:checked + label::before {
+            background-color: #4CAF50;
+            transform: translateY(-50%) translateX(60px);
+        }
+
+        .button-row .toggle label .status-text {
+            margin-left: 30px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .button-row .toggle label .status-text.off {
+            color: #721c24;
+        }
+
+        .button-row .toggle label .status-text.on {
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <h1>Szklarnia Relay Settings</h1>
+    <div class="button-container">
+        <div class="button-row">
+            <div class="description">Sekcja Pomidory</div>
+            <div class="toggle">
+                <input type="checkbox" id="section1" onchange="toggleState('section1')">
+                <label for="section1">
+                    <div class="status-text off">OFF</div>
+                    <div class="status-text on" style="display:none;">ON</div>
+                </label>
+            </div>
+        </div>
+        <div class="button-row">
+            <div class="description">Sekcja Alternatywna</div>
+            <div class="toggle">
+                <input type="checkbox" id="section2" onchange="toggleState('section2')">
+                <label for="section2">
+                    <div class="status-text off">OFF</div>
+                    <div class="status-text on" style="display:none;">ON</div>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleState(sectionId) {
+            const checkbox = document.getElementById(sectionId);
+            const label = document.querySelector(`label[for="${sectionId}"]`);
+            const statusTextOff = label.querySelector('.status-text.off');
+            const statusTextOn = label.querySelector('.status-text.on');
+            
+            if (checkbox.checked) {
+                statusTextOff.style.display = 'none';
+                statusTextOn.style.display = 'block';
+            } else {
+                statusTextOff.style.display = 'block';
+                statusTextOn.style.display = 'none';
+            }
+        }
+    </script>
+</body>
+</html>
