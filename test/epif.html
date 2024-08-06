@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        /* Basic styles for the gallery */
+        .imageHolder {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s;
+        }
+        .imageHolder img {
+            width: 100%;
+            height: auto;
+        }
+        .captionTextHolder {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            color: white;
+            padding: 10px;
+        }
+        .captionText {
+            display: block;
+            font-size: 1.2em;
+        }
+        .dots {
+            height: 15px;
+            width: 15px;
+            margin: 0 2px;
+            background-color: #bbb;
+            border-radius: 50%;
+            display: inline-block;
+            transition: background-color 0.6s ease;
+        }
+        .dots.active {
+            background-color: #717171;
+        }
+        .leftArrow, .rightArrow {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -22px;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+            transition: background-color 0.6s ease;
+            border-radius: 3px;
+            user-select: none;
+            background-color: rgba(0,0,0,0.8);
+        }
+        .rightArrow {
+            right: 0;
+        }
+        .leftArrow {
+            left: 0;
+        }
+        .slideTextFromTop {
+            animation: slideTextFromTop 1s;
+        }
+        @keyframes slideTextFromTop {
+            from { transform: translateY(-100%); }
+            to { transform: translateY(0); }
+        }
+        .slideTextFromBottom {
+            animation: slideTextFromBottom 1s;
+        }
+        @keyframes slideTextFromBottom {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="slideshow-container">
+        <div class="imageHolder">
+            <img src="https://via.placeholder.com/800x400?text=Slide+1" alt="Slide 1">
+            <div class="captionTextHolder">
+                <div class="captionText">Caption for Slide 1</div>
+            </div>
+        </div>
+        <div class="imageHolder">
+            <img src="https://via.placeholder.com/800x400?text=Slide+2" alt="Slide 2">
+            <div class="captionTextHolder">
+                <div class="captionText">Caption for Slide 2</div>
+            </div>
+        </div>
+        <!-- Add more slides here -->
+        <a class="leftArrow" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="rightArrow" onclick="plusSlides(1)">&#10095;</a>
+        <div id="dotsContainer"></div>
+    </div>
+    <div id="playPause" onclick="playPauseSlides()" style="position: absolute; bottom: 10px; right: 10px; background: rgba(0,0,0,0.8); color: white; padding: 10px; cursor: pointer;">Play</div>
+    <script>
+        // JavaScript code here
+        var slideIndex, slides, dots, captionText;
+        function initGallery() {
+            slideIndex = 0;
+            slides = document.getElementsByClassName("imageHolder");
+            slides[slideIndex].style.opacity = 1;
+
+            captionText = document.querySelector(".captionTextHolder .captionText");
+            captionText.innerHTML = slides[slideIndex].querySelector(".captionText").innerHTML;
+
+            if (slides.length < 2) {
+                var nextPrevBtns = document.querySelector(".leftArrow, .rightArrow");
+                nextPrevBtns.style.display = "none";
+            }
+
+            dots = [];
+            var dotsContainer = document.getElementById("dotsContainer");
+            for (var i = 0; i < slides.length; i++) {
+                var dot = document.createElement("span");
+                dot.classList.add("dots");
+                dotsContainer.append(dot);
+                dot.setAttribute("onclick", "moveSlide(" + i + ")");
+                dots.push(dot);
+            }
+            dots[slideIndex].classList.add("active");
+        }
+
+        initGallery();
+        function plusSlides(n) {
+            moveSlide(slideIndex + n);
+        }
+        function moveSlide(n) {
+            var i;
+            var current, next;
+            var moveSlideAnimClass = {
+                forCurrent: "",
+                forNext: ""
+            };
+            var slideTextAnimClass;
+            if (n > slideIndex) {
+                if (n >= slides.length) { n = 0; }
+                moveSlideAnimClass.forCurrent = "moveLeftCurrentSlide";
+                moveSlideAnimClass.forNext = "moveLeftNextSlide";
+                slideTextAnimClass = "slideTextFromTop";
+            } else if (n < slideIndex) {
+                if (n < 0) { n = slides.length - 1; }
+                moveSlideAnimClass.forCurrent = "moveRightCurrentSlide";
+                moveSlideAnimClass.forNext = "moveRightPrevSlide";
+                slideTextAnimClass = "slideTextFromBottom";
+            }
+
+            if (n != slideIndex) {
+                next = slides[n];
+                current = slides[slideIndex];
+                for (i = 0; i < slides.length; i++) {
+                    slides[i].className = "imageHolder";
+                    slides[i].style.opacity = 0;
+                    dots[i].classList.remove("active");
+                }
+                current.classList.add(moveSlideAnimClass.forCurrent);
+                next.classList.add(moveSlideAnimClass.forNext);
+                dots[n].classList.add("active");
+                slideIndex = n;
+                captionText.style.display = "none";
+                captionText.className = "captionText " + slideTextAnimClass;
+                captionText.innerHTML = slides[n].querySelector(".captionText").innerHTML;
+                captionText.style.display = "block";
+            }
+            document.getElementsByClassName("captionTextHolder")[0].style.animation = "slideTextFromTop 1s";
+            setTimeout(function () { document.getElementsByClassName("captionTextHolder")[0].style.animation = ""; }, 1000);
+            setTimeout(function () { document.getElementsByClassName('moveLeftCurrentSlide')[0].style.zIndex = 0; }, 500);
+        }
+        var timer = null;
+        function setTimer() {
+            timer = setInterval(function () {
+                plusSlides(1);
+            }, 6000);
+        }
+
+        setTimer();
+        function playPauseSlides() {
+            var playPauseBtn = document.getElementById("playPause");
+            if (timer == null) {
+                setTimer();
+                playPauseBtn.style.backgroundPositionY = "0px";
+            } else {
+                clearInterval(timer);
+                timer = null;
+                playPauseBtn.style.backgroundPositionY = "-33px";
+            }
+        }
+    </script>
+</body>
+</html>

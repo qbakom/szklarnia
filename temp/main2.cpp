@@ -80,9 +80,8 @@ setInterval(function ( ) {
 </html>
 )rawliteral";
 
-// Replaces placeholder with button section in your web page
 String processor(const String& var){
-  if(var == "BUTTONPLACEHOLDER"){
+  if(var == "$button"){
     String buttons ="";
     String outputStateValue = outputState();
     buttons+= "<h4>Output - GPIO 2 - State <span id=\"outputState\"></span></h4><label class=\"switch\"><input type=\"checkbox\" onchange=\"toggleCheckbox(this)\" id=\"output\" " + outputStateValue + "><span class=\"slider\"></span></label>";
@@ -121,7 +120,7 @@ void setup(){
 
   // Route for root / web page
   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    request->send_P(200, "text/html", index_html, processor);
+    request->send(200, "text/html", index_html);
   });
 
   // Send a GET request to <ESP_IP>/update?state=<inputMessage>
