@@ -29,9 +29,13 @@
 #ifndef TFT_SLPIN
 #endif
 
+#define NUM_RELAYS        2
 
-#define RELAY1_PIN       32
-#define RELAY2_PIN       26
+int relayGPIOs[NUM_RELAYS] = {21, 22};
+
+#define RELAY_NO         true
+#define RELAY1_PIN       21
+#define RELAY2_PIN       22
 //clean-up
 #define ADC_EN          14
 #define ADC_PIN         34
@@ -54,6 +58,24 @@ int cx=0;
 const char* ssid = "p-v";
 const char* password = "3.1415926";
 WebServer server(80);
+
+String relayState(int numRelay){
+  if(RELAY_NO){
+    if(digitalRead(relayGPIOs[numRelay-1])){
+      return "";
+    }
+    else {
+      return "checked";
+    }
+  }
+
+  else {
+    if (digitalRead(relayGPIOs[numRelay-1])) {return "";}
+    else { return "checked";}
+  }
+  return "";
+}
+
 
 String outputState()
 {
@@ -242,12 +264,39 @@ void handlebutton1()
   server.send(200, "text/plain", "");
 }
 
+void handlebutton2()
+{
+  butt2state = !butt2state;
+  digitalWrite(RELAY2_PIN, butt2state);
+  server.send(200, "text/plain", "");
+}
+
 void setup() 
 {
+
+//
+  for(int i=1; i<=NUM_RELAYS; i++)
+  {
+    pinMode(relayGPIOs[i-1], OUTPUT);
+    if (RELAY_NO)
+    {
+      digitalWrite(relayGPIOs[i-1], HIGH);
+    }
+    else
+    {
+      digitalWrite(relayGPIOs[i-1], LOW);
+    }
+  }
+
+
+
+
+//
+
   pinMode(RELAY1_PIN, OUTPUT);
   pinMode(RELAY2_PIN, OUTPUT);
-  digitalWrite(RELAY1_PIN, LOW);
-  digitalWrite(RELAY2_PIN, LOW);
+  digitalWrite(RELAY1_PIN, HIGH);
+  digitalWrite(RELAY2_PIN, HIGH);
 
   WiFi.mode(WIFI_STA);
   WiFi.begin(ssid, password);
